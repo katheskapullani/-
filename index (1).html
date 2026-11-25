@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FreeAI.dir — Free AI Tools Directory</title>
+<style>
+:root{color-scheme:dark;--bg:#0a0e14;--panel:#111826;--panel2:#161f31;--line:#1f2a40;--text:#d6deeb;--mute:#7d8aa5;--acc:#00e5a8;--acc2:#4cc2ff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.5;
+background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:44px 44px;background-attachment:fixed}
+body::before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse at 50% 0,rgba(0,229,168,.12),transparent 60%),var(--bg);opacity:.93;z-index:-1}
+.mono{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+header{padding:56px 0 28px}
+.bar{display:flex;gap:8px;align-items:center;color:var(--mute);font-size:12px;margin-bottom:22px}
+.dot{width:10px;height:10px;border-radius:50%;background:#ff5f57}.dot:nth-child(2){background:#febc2e}.dot:nth-child(3){background:#28c840}
+h1{font-size:clamp(30px,5.5vw,52px);margin:0 0 10px;letter-spacing:-.02em;line-height:1.1}
+h1 span{color:var(--acc)}
+.sub{color:var(--mute);max-width:640px;margin:0 0 22px}
+.term{color:var(--acc);font-size:14px;margin-bottom:18px;min-height:22px}
+.cursor{display:inline-block;width:8px;height:15px;background:var(--acc);vertical-align:-2px;animation:b 1s steps(1) infinite}
+@keyframes b{50%{opacity:0}}
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:26px}
+.stat{border:1px solid var(--line);background:var(--panel);padding:8px 14px;border-radius:8px;font-size:12px;color:var(--mute)}
+.stat b{color:var(--acc2);font-size:16px;margin-right:6px}
+.search{position:relative;max-width:620px}
+.search input{width:100%;background:var(--panel);border:1px solid var(--line);color:var(--text);padding:14px 56px 14px 42px;border-radius:10px;font-size:15px;outline:none;transition:.15s}
+.search input:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(0,229,168,.15)}
+.search::before{content:">_";position:absolute;left:14px;top:13px;color:var(--acc);font-family:ui-monospace,Menlo,monospace;font-size:14px}
+.search kbd{position:absolute;right:12px;top:12px;border:1px solid var(--line);border-radius:5px;padding:1px 8px;color:var(--mute);font-size:12px}
+.chips{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;gap:8px;overflow-x:auto;padding:14px 0;background:linear-gradient(var(--bg) 70%,transparent);scrollbar-width:none}
+.chip{flex:none;border:1px solid var(--line);background:var(--panel);color:var(--text);padding:8px 14px;border-radius:999px;font-size:13px;cursor:pointer;transition:.15s;font-family:inherit}
+.chip:hover{border-color:var(--acc2)}
+.chip.on{background:var(--acc);color:#04130e;border-color:var(--acc);font-weight:600}
+.chip i{font-style:normal;opacity:.6;margin-left:6px;font-size:11px}
+section{margin:30px 0 8px}
+.sh{display:flex;align-items:baseline;gap:12px;border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:16px}
+.sh h2{margin:0;font-size:19px}
+.sh span{color:var(--mute);font-size:12px}
+.sh em{color:var(--acc);font-style:normal;margin-right:6px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+a.card{display:flex;flex-direction:column;gap:10px;text-decoration:none;color:inherit;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;position:relative;overflow:hidden;transition:transform .15s,border-color .15s,background .15s}
+a.card::after{content:"↗";position:absolute;top:14px;right:16px;color:var(--mute);transition:.15s}
+a.card:hover{transform:translateY(-3px);border-color:var(--acc);background:var(--panel2)}
+a.card:hover::after{color:var(--acc)}
+a.card:focus-visible{outline:2px solid var(--acc2);outline-offset:2px}
+.top{display:flex;gap:12px;align-items:center}
+.ico{width:44px;height:44px;border-radius:11px;display:grid;place-items:center;font-weight:800;font-size:18px;color:#fff;flex:none;box-shadow:inset 0 0 0 1px rgba(255,255,255,.15)}
+.name{font-weight:650;font-size:16px}
+.host{font-size:11px;color:var(--mute)}
+.desc{font-size:13.5px;color:#aab6cc;flex:1}
+.meta{display:flex;flex-wrap:wrap;gap:6px;font-size:11px}
+.tag{border:1px solid var(--line);border-radius:5px;padding:2px 7px;color:var(--mute)}
+.tag.free{color:var(--acc);border-color:rgba(0,229,168,.4);background:rgba(0,229,168,.07)}
+.tag.dl{color:var(--acc2);border-color:rgba(76,194,255,.4);background:rgba(76,194,255,.07)}
+.empty{text-align:center;color:var(--mute);padding:60px 0;display:none}
+footer{border-top:1px solid var(--line);margin-top:50px;padding:28px 0 40px;color:var(--mute);font-size:12px}
+footer b{color:var(--acc)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="bar mono"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span style="margin-left:8px">~/freeai.dir — v1.0</span></div>
+  <h1>Free <span>AI Tools</span><br>by domain.</h1>
+  <p class="sub">A curated index of AI tools you can use at no cost to generate and export content — text, images, slides, video, audio, code and more. Click any card to jump straight to the tool.</p>
+  <div class="term mono" id="term"></div>
+  <div class="stats mono">
+    <div class="stat"><b id="sTools">0</b>tools</div>
+    <div class="stat"><b id="sCats">0</b>domains</div>
+    <div class="stat"><b>$0</b>to start</div>
+  </div>
+  <div class="search"><input id="q" type="search" placeholder="Search tools, domains or formats (e.g. png, mp3, pptx)…" autocomplete="off" aria-label="Search tools"><kbd class="mono">/</kbd></div>
+</header>
+<nav class="chips" id="chips" aria-label="Domains"></nav>
+<main id="main"></main>
+<div class="empty mono" id="empty">$ no results found — try another keyword_</div>
+<footer class="mono">
+  <b>NOTE:</b> “Free” means a free plan or free tier that lets you generate and export output. Daily limits, watermarks, resolution caps and sign-up requirements can change at any time — verify on each tool’s site.
+</footer>
+</div>
+<script>
+const C=[
+{id:"text",icon:"✍",name:"Text Generation",desc:"chat, writing, research"},
+{id:"image",icon:"🖼",name:"Image Generation",desc:"text-to-image, art, design"},
+{id:"ppt",icon:"📊",name:"Presentation / PPT",desc:"slides & decks"},
+{id:"video",icon:"🎬",name:"Video Generation",desc:"text-to-video, editing"},
+{id:"audio",icon:"🎧",name:"Audio & Music",desc:"music, voice, speech"},
+{id:"code",icon:"💻",name:"Code & Apps",desc:"coding assistants, app builders"},
+{id:"doc",icon:"📄",name:"Documents & Research",desc:"PDF chat, notes, summaries"}
+];
+const T=[
+["text","ChatGPT","https://chatgpt.com","Versatile chat assistant for writing, brainstorming, analysis and Q&A.","Copy · TXT · MD","#10a37f"],
+["text","Claude","https://claude.ai","Thoughtful assistant for long-form writing, analysis and coding help.","Copy · MD · Artifacts","#d97757"],
+["text","Google Gemini","https://gemini.google.com","Multimodal assistant with Google integration and export to Docs.","Copy · Docs","#4285f4"],
+["text","Perplexity","https://www.perplexity.ai","Answer engine that cites sources — great for fast research.","Copy · Share","#20b8cd"],
+["text","DeepSeek","https://chat.deepseek.com","Free reasoning-focused chat model for writing and problem solving.","Copy · TXT","#4d6bfe"],
+["text","Le Chat (Mistral)","https://chat.mistral.ai","Fast European chat assistant with a generous free tier.","Copy · TXT","#fa520f"],
+["image","Bing Image Creator","https://www.bing.com/images/create","Free text-to-image generation powered by OpenAI models.","PNG · JPG","#0078d4"],
+["image","Leonardo AI","https://app.leonardo.ai","Daily free credits for high-quality art, concept and product images.","PNG · JPG","#7c3aed"],
+["image","Ideogram","https://ideogram.ai","Excellent at rendering readable text inside generated images.","PNG","#ec4899"],
+["image","Craiyon","https://www.craiyon.com","Simple, no-fuss image generator you can try instantly.","PNG · JPG","#f59e0b"],
+["image","Adobe Firefly","https://firefly.adobe.com","Commercially-safe image generation with free monthly credits.","PNG · JPG","#fa0f00"],
+["image","Canva AI Image","https://www.canva.com/ai-image-generator/","Generate images and drop them straight into designs.","PNG · JPG · PDF","#00c4cc"],
+["ppt","Gamma","https://gamma.app","Turn a prompt into a full, designed deck, doc or webpage in seconds.","PPTX · PDF","#6366f1"],
+["ppt","Canva Presentations","https://www.canva.com/presentations/","Templates plus Magic Design for AI-assisted slide decks.","PPTX · PDF · PNG","#00c4cc"],
+["ppt","SlidesAI","https://www.slidesai.io","Convert text into Google Slides presentations automatically.","Slides · PPTX","#f97316"],
+["ppt","Google Gemini Slides","https://gemini.google.com","Ask Gemini to outline slides and export structured content.","Docs · Copy","#4285f4"],
+["video","Pika","https://pika.art","Text- and image-to-video with fun effects and a free plan.","MP4","#ff4f81"],
+["video","Kling AI","https://klingai.com","Realistic video generation with daily free credits.","MP4","#22d3ee"],
+["video","Luma Dream Machine","https://lumalabs.ai/dream-machine","Cinematic text-to-video and image animation.","MP4","#a78bfa"],
+["video","CapCut","https://www.capcut.com","Free editor with AI captions, effects and script-to-video.","MP4","#e5e7eb"],
+["audio","Suno","https://suno.com","Generate full songs with vocals from a text prompt.","MP3","#f43f5e"],
+["audio","Udio","https://www.udio.com","High-fidelity AI music creation with free daily credits.","MP3","#8b5cf6"],
+["audio","ElevenLabs","https://elevenlabs.io","Lifelike text-to-speech and voice generation, free monthly quota.","MP3","#0ea5e9"],
+["audio","TTSMaker","https://ttsmaker.com","Free text-to-speech in many languages and voices.","MP3 · WAV","#14b8a6"],
+["audio","Mubert","https://mubert.com","Royalty-free generative background music for creators.","MP3","#84cc16"],
+["code","GitHub Copilot","https://github.com/features/copilot","In-editor completions and chat, with a free tier for individuals.","Code","#2ea043"],
+["code","Google AI Studio","https://aistudio.google.com","Prototype with Gemini models and export code snippets.","Code · JSON","#4285f4"],
+["code","Bolt","https://bolt.new","Prompt-to-full-stack web app in the browser.","ZIP · Code","#3b82f6"],
+["code","v0","https://v0.dev","Generate React/Tailwind UI components from a prompt.","Code","#e5e7eb"],
+["code","Replit","https://replit.com","Cloud IDE with an AI agent that builds and runs apps.","Code · ZIP","#f26207"],
+["code","Windsurf","https://windsurf.com","AI-native editor with a free plan for everyday coding.","Code","#06b6d4"],
+["doc","NotebookLM","https://notebooklm.google.com","Upload sources, get grounded summaries, briefs and audio overviews.","Notes · Audio","#fbbf24"],
+["doc","ChatPDF","https://www.chatpdf.com","Ask questions of any PDF and get answers with page references.","Copy · TXT","#ef4444"],
+["doc","QuillBot","https://quillbot.com","Paraphraser, summarizer and grammar checker.","Copy · DOCX","#4ade80"],
+["doc","Grammarly","https://www.grammarly.com","Free AI grammar and tone suggestions across the web.","Copy","#15c39a"],
+["doc","Otter.ai","https://otter.ai","Meeting transcription and AI summaries with a free plan.","TXT · SRT","#2563eb"]
+];
+const $=s=>document.querySelector(s);
+const host=u=>new URL(u).hostname.replace(/^www\./,"");
+let cat="all",term="";
+const total=T.length;
+$("#sTools").textContent=total;$("#sCats").textContent=C.length;
+function chips(){
+  const mk=(id,label,n)=>`<button class="chip ${cat===id?"on":""}" data-id="${id}">${label}<i>${n}</i></button>`;
+  $("#chips").innerHTML=mk("all","All",total)+C.map(c=>mk(c.id,c.icon+" "+c.name,T.filter(t=>t[0]===c.id).length)).join("");
+}
+function render(){
+  const q=term.trim().toLowerCase();
+  let html="",shown=0;
+  C.forEach(c=>{
+    if(cat!=="all"&&cat!==c.id)return;
+    const items=T.filter(t=>t[0]===c.id&&(!q||(t[1]+" "+t[3]+" "+t[4]+" "+c.name+" "+c.desc).toLowerCase().includes(q)));
+    if(!items.length)return;
+    shown+=items.length;
+    html+=`<section id="${c.id}"><div class="sh"><h2><em class="mono">//</em>${c.icon} ${c.name}</h2><span class="mono">${c.desc} · ${items.length} tools</span></div><div class="grid">`+
+    items.map(t=>`<a class="card" href="${t[2]}" target="_blank" rel="noopener noreferrer" title="Open ${t[1]}">
+      <div class="top"><div class="ico" style="background:linear-gradient(135deg,${t[5]},#0008),${t[5]}">${t[1][0]}</div>
+      <div><div class="name">${t[1]}</div><div class="host mono">${host(t[2])}</div></div></div>
+      <div class="desc">${t[3]}</div>
+      <div class="meta mono"><span class="tag free">FREE</span><span class="tag dl">⬇ ${t[4]}</span></div></a>`).join("")+`</div></section>`;
+  });
+  $("#main").innerHTML=html;
+  $("#empty").style.display=shown?"none":"block";
+}
+$("#chips").addEventListener("click",e=>{const b=e.target.closest(".chip");if(!b)return;cat=b.dataset.id;chips();render();});
+$("#q").addEventListener("input",e=>{term=e.target.value;render();});
+document.addEventListener("keydown",e=>{if(e.key==="/"&&document.activeElement!==$("#q")){e.preventDefault();$("#q").focus();}});
+// typing terminal line
+const msg="$ ls ./tools --free --exportable | wc -l  →  "+total+" results";
+let i=0;(function type(){$("#term").innerHTML=msg.slice(0,i)+'<span class="cursor"></span>';if(i++<msg.length)setTimeout(type,28);})();
+chips();render();
+</script>
+</body>
+</html>
